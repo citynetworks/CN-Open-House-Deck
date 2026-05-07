@@ -1,0 +1,483 @@
+/* ==========================================================================
+   FUZE Design System — Colors & Type tokens  ·  v2.1 · 2026 Gradient Refresh
+   --------------------------------------------------------------------------
+   Direction: atmospheric, signal, energy. The brand surface is no longer
+   near-black — it's a grainy purple→blue gradient field with signature
+   concentric "ripple" rings (the Connectivity mark from the Brand Book).
+   Typography stays tight and confident. Radii stay architectural. The mood
+   is warmer, softer at the edges, more clearly FUZE-owned.
+   Inspiration: Vercel/Linear gradient heros, brand surface treatments that
+   feel like a captured moment of signal, not a flat system screen.
+   ========================================================================== */
+
+/* ─── Fonts ─────────────────────────────────────────────────────────────────
+   Display = Poppins SemiBold (600) — primary title typeface per Brand Book 2025.
+   Body = Inter 400/500 — paragraphs, UI chrome, long-form copy.
+   Inter Tight retained for oversized numeric moments (tabular-nums, stats).
+   Mono = ui-monospace stack for specs, receipts, station IDs.
+   ────────────────────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&display=swap');
+
+/* Local Poppins TTFs bundled from the brand kit — used if Google Fonts blocked */
+@font-face {
+  font-family: 'Poppins'; font-style: normal; font-weight: 400; font-display: swap;
+  src: url('fonts/Poppins-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Poppins'; font-style: normal; font-weight: 500; font-display: swap;
+  src: url('fonts/Poppins-Medium.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Poppins'; font-style: normal; font-weight: 600; font-display: swap;
+  src: url('fonts/Poppins-SemiBold.ttf') format('truetype');
+}
+
+:root {
+  /* ─── Core palette (unchanged — brand equity) ──────────────────────────── */
+  --obsidian-blue: #001B32;
+  --connect-blue:  #0047CF;
+  --charge-blue:   #009EFA;
+  --spark-blue:    #43F4FE;
+  --pulse-purple:  #4A1099;
+  --pixel-purple:  #941BFF;
+  --power-blue:    #47D6FA;
+  --electric-yellow: #F4FF28;
+
+  /* ─── Ink scale (new in v2) ────────────────────────────────────────────────
+     A richer, denser dark than pure Obsidian — lets us go near-black for
+     timeless high-contrast hero surfaces. Pure obsidian stays as brand mark.
+     ─────────────────────────────────────────────────────────────────────── */
+  --ink-950: #05101C;   /* near-black hero surfaces — Equinox / Uber mood */
+  --ink-900: #0A1A2B;
+  --ink-800: #102438;
+  --ink-700: #1B3450;
+  --ink-600: #2D4868;   /* muted text on light */
+  --ink-500: #56708E;
+  --ink-400: #7E93AC;
+  --ink-300: #A9B8CA;
+  --ink-200: #D0D9E3;
+  --ink-150: #E1E7ED;
+  --ink-100: #EEF2F6;
+  --ink-50:  #F6F8FA;   /* page backgrounds */
+
+  /* Opacity variants over ink-950 (for use on colored surfaces) */
+  --ink-a75: rgba(5,16,28,0.75);
+  --ink-a50: rgba(5,16,28,0.50);
+  --ink-a25: rgba(5,16,28,0.25);
+  --ink-a12: rgba(5,16,28,0.12);
+  --ink-a06: rgba(5,16,28,0.06);
+
+  /* Opacity variants over white (for use on dark surfaces) */
+  --white-a75: rgba(255,255,255,0.75);
+  --white-a50: rgba(255,255,255,0.50);
+  --white-a25: rgba(255,255,255,0.25);
+  --white-a12: rgba(255,255,255,0.12);
+  --white-a06: rgba(255,255,255,0.06);
+
+  --white: #FFFFFF;
+
+  /* ─── Surfaces ─────────────────────────────────────────────────────────── */
+  --surface:        #FFFFFF;
+  --surface-muted:  var(--ink-50);
+  --surface-sunken: var(--ink-100);
+  --surface-dark:   var(--ink-950);  /* primary dark mode surface */
+  --border:         var(--ink-150);
+  --border-strong:  var(--ink-200);
+  --border-dark:    var(--white-a12);
+
+  /* ─── Semantic tokens ──────────────────────────────────────────────────── */
+  --fg-1:      var(--ink-950);   /* primary text */
+  --fg-2:      var(--ink-600);   /* secondary text */
+  --fg-3:      var(--ink-500);   /* tertiary / labels */
+  --fg-inverse: var(--white);
+
+  --bg-1: var(--surface);
+  --bg-2: var(--surface-muted);
+  --bg-3: var(--surface-sunken);
+  --bg-brand: var(--ink-950);
+
+  --accent-charge: var(--charge-blue);
+  --accent-ad:     var(--pixel-purple);  /* v2: pixel is more vibrant than pulse for pops */
+  --accent-alert:  var(--electric-yellow);
+
+  --success: #0FB36B;
+  --warning: #F4AA00;
+  --danger:  #E5384F;
+
+  /* ─── Gradients — CSS fallbacks ─────────────────────────────────────────
+     Prefer the raster gradient images in `assets/graphics/` for hero surfaces
+     — they carry the brand's signature film grain and soft-edge falloff.
+     These CSS gradients are fallbacks / accent tints when an image won't fit
+     (e.g. inline buttons, small UI chrome).
+     ─────────────────────────────────────────────────────────────────────── */
+  --fusion-gradient:
+    linear-gradient(120deg,
+      var(--pulse-purple) 0%,
+      var(--pixel-purple) 35%,
+      var(--connect-blue) 75%,
+      var(--charge-blue) 100%);
+  --charge-gradient:
+    linear-gradient(135deg, var(--charge-blue) 0%, var(--connect-blue) 70%, var(--pulse-purple) 100%);
+  --ad-gradient:
+    linear-gradient(135deg, var(--pixel-purple) 0%, var(--pulse-purple) 55%, var(--connect-blue) 100%);
+  --hero-overlay-charge: linear-gradient(110deg, rgba(0,71,207,0.72) 0%, rgba(0,158,250,0.42) 100%);
+  --hero-overlay-ad:     linear-gradient(110deg, rgba(74,16,153,0.78) 0%, rgba(148,27,255,0.48) 100%);
+  --hero-overlay-dark:   linear-gradient(110deg, rgba(5,16,28,0.70) 0%, rgba(5,16,28,0.30) 100%);
+
+  /* ─── Signature gradient surface images ─────────────────────────────────
+     Brand-made gradient plates. Use as `background-image` with
+     `background-size: cover`. Sorted by DOMINANT brand hue:
+       af-*        adFUZE plates      — Pulse/Pixel Purple dominant (6)
+       cf-*        chargeFUZE plates  — Charge/Spark Blue dominant  (6)
+       spectrum-*  shared plates      — purple↔blue transitions     (4)
+     ─────────────────────────────────────────────────────────────────────── */
+
+  /* adFUZE plates ── purple-dominant */
+  --af-01-purple-blue:        url('assets/graphics/af-01-purple-blue.png');
+  --af-02-purple-fade:        url('assets/graphics/af-02-purple-fade.png');
+  --af-03-ripple-purple-spot: url('assets/graphics/af-03-ripple-purple-spot.png');
+  --af-04-purple-dense:       url('assets/graphics/af-04-purple-dense.png');
+  --af-05-ripple-purple:      url('assets/graphics/af-05-ripple-purple.png');
+  --af-06-purple-spotlight:   url('assets/graphics/af-06-purple-spotlight.png');
+
+  /* chargeFUZE plates ── blue-dominant */
+  --cf-01-ripple-blue:        url('assets/graphics/cf-01-ripple-blue.png');
+  --cf-02-ripple-spotlight:   url('assets/graphics/cf-02-ripple-spotlight.png');
+  --cf-03-blue-ripple-dense:  url('assets/graphics/cf-03-blue-ripple-dense.png');
+  --cf-04-blue-soft:          url('assets/graphics/cf-04-blue-soft.png');
+  --cf-05-blue-fade:          url('assets/graphics/cf-05-blue-fade.png');
+  --cf-06-blue-white:         url('assets/graphics/cf-06-blue-white.png');
+
+  /* Spectrum plates ── mixed purple↔blue, usable by either brand */
+  --spectrum-01-purple-light:        url('assets/graphics/spectrum-01-purple-light.png');
+  --spectrum-02-ripple-blue-purple:  url('assets/graphics/spectrum-02-ripple-blue-purple.png');
+  --spectrum-03-violet-blue:         url('assets/graphics/spectrum-03-violet-blue.png');
+  --spectrum-04-purple-blue-ripples: url('assets/graphics/spectrum-04-purple-blue-ripples.png');
+
+  /* Canonical surfaces — the ones to reach for by default */
+  --surface-hero:     var(--spectrum-02-ripple-blue-purple);  /* shared — full purple↔blue range with ripple */
+  --surface-charge:   var(--cf-03-blue-ripple-dense);         /* chargeFUZE moments */
+  --surface-ad:       var(--af-05-ripple-purple);             /* adFUZE moments */
+  --surface-spectrum: var(--spectrum-04-purple-blue-ripples); /* soft violet→white with ripples */
+  --surface-fade:     var(--af-02-purple-fade);               /* purple→light for text-on-image */
+  --surface-spotlight:var(--af-03-ripple-purple-spot);        /* purple + dramatic blue spotlight */
+
+  /* Legacy aliases (do not use in new work; kept for back-compat) */
+  --grad-purple-blue-soft:    var(--af-01-purple-blue);
+  --grad-purple-fade:         var(--af-02-purple-fade);
+  --grad-ripple-spectrum:     var(--af-03-ripple-purple-spot);
+  --grad-ripple-light:        var(--spectrum-01-purple-light);
+  --grad-purple-dense:        var(--af-04-purple-dense);
+  --grad-ripple-purple:       var(--af-05-ripple-purple);
+  --grad-ripple-bluepurple:   var(--spectrum-02-ripple-blue-purple);
+  --grad-violet-blue:         var(--spectrum-03-violet-blue);
+  --grad-ripple-blue:         var(--cf-01-ripple-blue);
+  --grad-purple-spotlight:    var(--af-06-purple-spotlight);
+  --grad-ripple-spotlight:    var(--cf-02-ripple-spotlight);
+  --grad-blue-ripple-dense:   var(--cf-03-blue-ripple-dense);
+  --grad-blue-soft:           var(--cf-04-blue-soft);
+  --grad-blue-fade:           var(--cf-05-blue-fade);
+  --grad-blue-white:          var(--cf-06-blue-white);
+  --grad-purple-blue-ripples: var(--spectrum-04-purple-blue-ripples);
+
+  /* Former cf-* token names (now remapped to real brand categorization) */
+  --cf-01-purple-blue:         var(--af-01-purple-blue);
+  --cf-02-purple-fade:         var(--af-02-purple-fade);
+  --cf-03-ripple-spectrum:     var(--af-03-ripple-purple-spot);
+  --cf-04-ripple-light:        var(--spectrum-01-purple-light);
+  --cf-05-purple-dense:        var(--af-04-purple-dense);
+  --cf-06-ripple-purple:       var(--af-05-ripple-purple);
+  --cf-07-ripple-bluepurple:   var(--spectrum-02-ripple-blue-purple);
+  --cf-08-violet-blue:         var(--spectrum-03-violet-blue);
+  --cf-09-ripple-blue:         var(--cf-01-ripple-blue);
+  --cf-10-purple-spotlight:    var(--af-06-purple-spotlight);
+  --cf-11-ripple-spotlight:    var(--cf-02-ripple-spotlight);
+  --cf-12-blue-ripple-dense:   var(--cf-03-blue-ripple-dense);
+  --cf-13-blue-soft:           var(--cf-04-blue-soft);
+  --cf-14-blue-fade:           var(--cf-05-blue-fade);
+  --cf-15-blue-white:          var(--cf-06-blue-white);
+  --cf-16-purple-blue-ripples: var(--spectrum-04-purple-blue-ripples);
+
+  /* ─── Typography ──────────────────────────────────────────────────────────
+     BRAND STANDARD (per Brand Book 2025, p.33):
+       • Poppins is the PRIMARY typeface — SemiBold (600) for titles,
+         Regular (400) for display paragraphs.
+       • Inter is the SECONDARY / body typeface — everywhere paragraphs,
+         UI chrome, captions, labels, help text live.
+       • Inter Tight handles oversized numeric/stat moments (tnum).
+     ─────────────────────────────────────────────────────────────────────── */
+  --font-display: 'Poppins', 'Helvetica Neue', Arial, sans-serif;
+  --font-numeric: 'Inter Tight', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --font-body:    'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono:    ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* Display type — Poppins SemiBold. Roomier line-heights than v1 — Poppins
+     needs more air than Inter at identical sizes. */
+  --fs-hero:     clamp(56px, 8vw, 140px);  /* deck covers, marketing heroes */
+  --fs-display:  clamp(44px, 5.5vw, 88px); /* section dividers, page titles */
+  --fs-super:    clamp(32px, 4vw, 56px);   /* card headlines */
+  --fs-title:    clamp(24px, 2.8vw, 36px); /* sub-sections */
+  --fs-subtitle: 20px;
+  --fs-body-lg:  17px;
+  --fs-body:     15px;
+  --fs-body-sm:  13px;
+  --fs-detail:   12px;
+  --fs-label:    11px;
+
+  --lh-hero:     0.96;
+  --lh-display:  1.00;
+  --lh-super:    1.08;
+  --lh-title:    1.15;
+  --lh-subtitle: 1.35;
+  --lh-body:     1.55;
+  --lh-tight:    1.2;
+
+  --fw-display: 600;   /* Poppins SemiBold — brand-standard title weight */
+  --fw-title:   600;
+  --fw-body:    400;
+  --fw-medium:  500;
+  --fw-label:   600;
+
+  --tracking-hero:  -0.02em;   /* Poppins needs less tightening than Inter */
+  --tracking-tight: -0.012em;
+  --tracking-body:  -0.005em;
+  --tracking-label:  0.10em;
+  --tracking-mono:   0;
+
+  /* ─── Spacing (4pt base, denser pads than v1) ──────────────────────────── */
+  --sp-0:  0;      --sp-1: 4px;    --sp-2: 8px;    --sp-3: 12px;
+  --sp-4: 16px;    --sp-5: 20px;   --sp-6: 24px;   --sp-8: 32px;
+  --sp-10: 40px;   --sp-12: 48px;  --sp-14: 56px;  --sp-16: 64px;
+  --sp-20: 80px;   --sp-24: 96px;  --sp-32: 128px;
+
+  /* Canonical layout rhythms for decks & marketing */
+  --slide-pad:    clamp(48px, 5vw, 88px);
+  --section-pad:  clamp(72px, 9vw, 144px);
+
+  /* ─── Radii (architectural — tighter than v1) ──────────────────────────── */
+  --radius-xs:   2px;
+  --radius-sm:   4px;
+  --radius-md:   8px;    /* default for buttons, inputs */
+  --radius-lg:   12px;   /* cards */
+  --radius-xl:   16px;   /* large cards, hero panels */
+  --radius-2xl:  24px;   /* rare — reserved for product imagery frames */
+  --radius-pill: 9999px; /* chips, status tags ONLY */
+
+  /* ─── Shadows (restrained — border-first) ──────────────────────────────── */
+  --shadow-xs: 0 1px 0 rgba(5,16,28,0.04);
+  --shadow-sm: 0 1px 2px rgba(5,16,28,0.06), 0 0 0 1px rgba(5,16,28,0.04);
+  --shadow-md: 0 4px 16px rgba(5,16,28,0.08);
+  --shadow-lg: 0 24px 60px rgba(5,16,28,0.14);
+  --shadow-xl: 0 48px 120px rgba(5,16,28,0.20);
+  --shadow-glow-charge: 0 8px 40px rgba(0,158,250,0.30);
+  --shadow-glow-ad:     0 8px 40px rgba(148,27,255,0.30);
+
+  /* ─── Motion ──────────────────────────────────────────────────────────── */
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-expo:   cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-instant: 80ms;
+  --dur-fast:    140ms;
+  --dur-base:    220ms;
+  --dur-slow:    400ms;
+  --dur-hero:    700ms;
+
+  /* ─── Layout ──────────────────────────────────────────────────────────── */
+  --container-max: 1280px;
+  --container-pad: clamp(20px, 3vw, 48px);
+
+  /* ─── Legacy aliases (back-compat with v1 cards) ───────────────────────── */
+  --ink-75: var(--ink-a75);
+  /* Note: v1 --ink-50/25/12/06 were rgba; v2 --ink-50 is now a hex swatch.
+     Cards still using the old ink-50 as a color will now render as ink-50 hex
+     (near-white). Update any v1 card that broke visibly. */
+  --ink-25: var(--ink-a25);
+  --ink-12: var(--ink-a12);
+  --ink-06: var(--ink-a06);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Base element styling
+   ────────────────────────────────────────────────────────────────────────── */
+html { color: var(--fg-1); background: var(--bg-1); }
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body); line-height: var(--lh-body);
+  letter-spacing: var(--tracking-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'ss01' on, 'cv11' on;  /* Inter: alt 'a', stylistic set 01 — harmless on fallback */
+}
+
+/* Headline presets: big, tight, confident. */
+.t-hero, h1.t-hero {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-hero);
+  line-height: var(--lh-hero);
+  letter-spacing: var(--tracking-hero);
+  margin: 0;
+}
+.t-display, h1, h1.t-display {
+  font-family: var(--font-display);
+  font-weight: var(--fw-display);
+  font-size: var(--fs-display);
+  line-height: var(--lh-display);
+  letter-spacing: var(--tracking-hero);
+  margin: 0;
+}
+.t-super, h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-super);
+  line-height: var(--lh-super);
+  letter-spacing: var(--tracking-tight);
+  margin: 0;
+}
+.t-title, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-title);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tracking-tight);
+  margin: 0;
+}
+.t-subtitle, h4 {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: var(--fs-subtitle);
+  line-height: var(--lh-subtitle);
+  letter-spacing: var(--tracking-body);
+  margin: 0;
+}
+p, .t-body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  margin: 0;
+}
+.t-body-lg { font-size: var(--fs-body-lg); line-height: 1.5; }
+.t-body-sm { font-size: var(--fs-body-sm); line-height: 1.45; }
+small, .t-detail {
+  font-size: var(--fs-detail);
+  line-height: 1.4;
+  color: var(--fg-2);
+}
+.t-label {
+  font-family: var(--font-body);
+  font-weight: var(--fw-label);
+  font-size: var(--fs-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+.t-numeric {
+  font-family: var(--font-numeric);
+  font-feature-settings: 'tnum' on, 'ss01' on;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  letter-spacing: var(--tracking-hero);
+}
+code, pre, .t-mono { font-family: var(--font-mono); letter-spacing: var(--tracking-mono); }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Dark surface helper — the v2 direction is atmospheric, not near-black.
+   This helper now paints a gradient plate by default; opt out with
+   `.surface-dark.flat` if you truly need a flat ink backdrop (e.g. print).
+   ────────────────────────────────────────────────────────────────────────── */
+.surface-dark {
+  background-color: var(--pulse-purple);
+  background-image: var(--surface-hero);
+  background-size: cover;
+  background-position: center;
+  color: var(--white);
+}
+.surface-dark.flat {
+  background-color: var(--ink-950);
+  background-image: none;
+}
+.surface-dark .t-label { color: var(--white-a50); }
+.surface-dark small, .surface-dark .t-detail { color: var(--white-a75); }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Gradient surface helper — drop a raster gradient onto any container.
+   Usage:  <div class="surface-grad" data-grad="hero">...</div>
+           <div class="surface-grad" data-grad="charge">...</div>
+           <div class="surface-grad" data-grad="ad">...</div>
+   Every variant inverts text to white and dims labels.
+   ────────────────────────────────────────────────────────────────────────── */
+.surface-grad {
+  background-color: var(--pulse-purple);
+  background-image: var(--surface-hero);
+  background-size: cover;
+  background-position: center;
+  color: var(--white);
+  position: relative;
+  isolation: isolate;
+}
+.surface-grad[data-grad="charge"] { background-image: var(--surface-charge); }
+.surface-grad[data-grad="ad"]     { background-image: var(--surface-ad); }
+.surface-grad[data-grad="fade"]   { background-image: var(--surface-fade); }
+.surface-grad[data-grad="spectrum"]{ background-image: var(--grad-ripple-spectrum); }
+.surface-grad[data-grad="spotlight"]{ background-image: var(--grad-ripple-spotlight); }
+.surface-grad[data-grad="purple"] { background-image: var(--grad-purple-dense); }
+.surface-grad[data-grad="blue"]   { background-image: var(--grad-blue-soft); }
+.surface-grad[data-grad="violet"] { background-image: var(--grad-violet-blue); }
+.surface-grad[data-grad="fade-light"] { background-image: var(--grad-blue-white); color: var(--ink-950); }
+.surface-grad .t-label { color: var(--white-a75); }
+.surface-grad[data-grad="fade-light"] .t-label { color: var(--ink-600); }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Ripple ornament — concentric arcs originating from a point.
+   Matches the Brand Book "Connectivity" mark and the ring motif baked into
+   the gradient plates. Scale via --size. Origin via --ox / --oy (0..100%).
+
+   <div class="ripple" style="--size:900px; --ox:0%; --oy:100%"></div>
+   ────────────────────────────────────────────────────────────────────────── */
+.ripple {
+  position: absolute;
+  width: var(--size, 800px);
+  height: var(--size, 800px);
+  left: var(--ox, 50%);
+  top: var(--oy, 50%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+.ripple::before,
+.ripple::after,
+.ripple > .r {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid var(--white-a25);
+}
+.ripple::before { inset: 18%; border-color: var(--white-a50); }
+.ripple::after  { inset: 36%; border-color: var(--white-a75); }
+
+/* Ripple for dark ink color (use on light surfaces) */
+.ripple.ink { mix-blend-mode: multiply; }
+.ripple.ink::before,
+.ripple.ink::after,
+.ripple.ink > .r { border-color: var(--ink-a12); }
+.ripple.ink::before { border-color: var(--ink-a25); }
+.ripple.ink::after  { border-color: var(--ink-a50); }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Film grain — the gradient plates carry a subtle noise texture. When a
+   solid color surface sits next to a gradient surface, add .has-grain to
+   keep the visual texture consistent.
+   ────────────────────────────────────────────────────────────────────────── */
+.has-grain { position: relative; isolation: isolate; }
+.has-grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0.22 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+.has-grain > * { position: relative; z-index: 1; }

@@ -1,0 +1,169 @@
+/* ============================================================
+   chargeFUZE Brand FX — Lightning, gradients, slide motion
+   ============================================================ */
+
+/* ---------- LIGHTNING STRIKE ---------- */
+.fx-strike-layer {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 2;
+}
+.fx-strike {
+  position: absolute;
+  top: -10%;
+  width: 4px;
+  height: 0;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(67, 244, 254, 0.0) 5%,
+    rgba(67, 244, 254, 0.95) 30%,
+    rgba(0, 158, 250, 1) 60%,
+    rgba(67, 244, 254, 0.6) 90%,
+    transparent 100%);
+  filter: blur(0.5px) drop-shadow(0 0 12px rgba(67, 244, 254, 0.85)) drop-shadow(0 0 28px rgba(0, 158, 250, 0.55));
+  transform-origin: top center;
+  opacity: 0;
+}
+.fx-strike.animate {
+  animation: strike-fall 480ms cubic-bezier(0.7, 0, 0.3, 1) forwards;
+}
+@keyframes strike-fall {
+  0%   { height: 0;    opacity: 0; }
+  18%  { height: 35%;  opacity: 1; }
+  30%  { height: 65%;  opacity: 1; }
+  45%  { height: 100%; opacity: 1; }
+  60%  { opacity: 1; filter: blur(0px) drop-shadow(0 0 24px rgba(67,244,254,1)) drop-shadow(0 0 56px rgba(0,158,250,0.8)) brightness(1.4); }
+  72%  { opacity: 0.6; }
+  82%  { opacity: 1;   filter: blur(1px) drop-shadow(0 0 18px rgba(67,244,254,0.7)); }
+  100% { opacity: 0;   filter: blur(2px); }
+}
+
+/* Strike branches (mini SVG bolts) */
+.fx-strike-branch {
+  position: absolute;
+  width: 80px; height: 120px;
+  opacity: 0;
+}
+.fx-strike-branch.animate {
+  animation: branch-flash 420ms cubic-bezier(0.7, 0, 0.3, 1) forwards;
+}
+@keyframes branch-flash {
+  0%   { opacity: 0; transform: scale(0.6); }
+  20%  { opacity: 1; transform: scale(1); }
+  60%  { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.05); }
+}
+
+/* Whole-screen flash on strike impact */
+.fx-flash {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at var(--flash-x, 50%) var(--flash-y, 30%),
+    rgba(67, 244, 254, 0.35) 0%,
+    rgba(0, 158, 250, 0.18) 18%,
+    transparent 45%);
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  z-index: 3;
+}
+.fx-flash.animate {
+  animation: flash-pulse 520ms ease-out forwards;
+}
+@keyframes flash-pulse {
+  0%   { opacity: 0; }
+  10%  { opacity: 1; }
+  20%  { opacity: 0.4; }
+  35%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ---------- AMBIENT FLOATING SPARKS ---------- */
+.fx-sparks {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+.fx-spark {
+  position: absolute;
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: rgba(67, 244, 254, 0.9);
+  box-shadow: 0 0 8px rgba(67, 244, 254, 0.8), 0 0 16px rgba(0, 158, 250, 0.5);
+  animation: spark-drift 8s linear infinite;
+  opacity: 0;
+}
+@keyframes spark-drift {
+  0%   { opacity: 0; transform: translateY(0) translateX(0); }
+  10%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-110vh) translateX(40px); }
+}
+
+/* ---------- BRAND BOLT ACCENTS ---------- */
+.fx-corner-bolt {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.08;
+  transition: opacity 800ms ease;
+}
+.fx-corner-bolt.tr { top: -80px; right: -60px; transform: rotate(-12deg); width: 480px; }
+.fx-corner-bolt.bl { bottom: -120px; left: -80px; transform: rotate(168deg); width: 360px; }
+
+/* ---------- SLIDE ENTRY MOTION (transitions stalled in some iframe contexts; using instant + delayed via JS) ---------- */
+section .eyebrow,
+section .title,
+section .body,
+section .body-sm,
+section .stat-num,
+section .stat-label,
+section .bug { opacity: 1; }
+section .eyebrow { opacity: 0.7; }
+section .eyebrow.dark { opacity: 0.7; }
+
+/* ---------- ANIMATED GRADIENT SHEEN ---------- */
+.s-dark::after,
+.s-hero-spot::after,
+.s-hero-dense::after,
+.s-fade::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 60%;
+  background: radial-gradient(ellipse at 100% 50%,
+    rgba(0, 158, 250, 0.18),
+    rgba(67, 244, 254, 0.08) 30%,
+    transparent 65%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1200ms ease;
+  z-index: 0;
+}
+.s-dark.is-active::after,
+.s-hero-spot.is-active::after,
+.s-hero-dense.is-active::after,
+.s-fade.is-active::after {
+  opacity: 1;
+}
+
+/* Make sure .frame sits above FX */
+.frame { z-index: 10; }
+.foot { z-index: 10; }
+.bug { z-index: 11; }
+
+/* ---------- BLUE TRACER LINE (slide bottom accent) ---------- */
+.fx-tracer {
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 100%; height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(67, 244, 254, 0) 10%,
+    var(--spark-blue) 50%,
+    rgba(67, 244, 254, 0) 90%,
+    transparent 100%);
+  z-index: 2;
+  opacity: 0.6;
+}
