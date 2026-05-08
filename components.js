@@ -350,8 +350,8 @@ document.querySelectorAll('.hw-card-btn').forEach(b => {
 
 // Slide 05 — lightbox: click photo frame → enlarge active image
 const HW_PHOTO_SRC = {
-  F10: 'assets/photos/station-fattuesday.jpg',
-  F15: 'assets/photos/station-f15.jpg',
+  F10: 'station-fattuesday.jpg',
+  F15: 'station-f15.jpg',
 };
 function openHwLightbox() {
   const active = document.querySelector('.hw-card-btn.is-active');
@@ -391,8 +391,8 @@ document.querySelectorAll('#hw-lightbox [data-close]').forEach(el => {
 });
 // Slide 07 — map lightbox
 const MAP_PHOTOS = {
-  competitor: { src: 'assets/photos/map-competitor.png', label: 'THE COMPETITION', venue: 'Lyte · LA · ~10 visible stations' },
-  chargefuze: { src: 'assets/photos/map-chargefuze.png', label: 'CHARGEFUZE', venue: 'Same map, same city · 200+ active stations' },
+  competitor: { src: 'map-competitor.png', label: 'THE COMPETITION', venue: 'Lyte · LA · ~10 visible stations' },
+  chargefuze: { src: 'map-chargefuze.png', label: 'CHARGEFUZE', venue: 'Same map, same city · 200+ active stations' },
 };
 function openMapLightbox(key) {
   const m = MAP_PHOTOS[key];
