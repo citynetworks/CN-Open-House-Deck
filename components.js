@@ -74,7 +74,7 @@ const TIERS = {
   A: {
     color: 'var(--charge-blue)',
     name: 'Tier A · Premier venues',
-    pay60: 500, payAfter: 400,
+    pay60: 400, payAfter: 400,
     qual: '500+ Google reviews · key metro markets · top-flow venue types',
     types: ['Bars', 'Hotels', 'Casinos', 'Music venues', 'Major restaurants'],
     examples: ['MSG Madison Square Garden', 'Bellagio Las Vegas', 'The Bowery Hotel', 'Jazz at Lincoln Center'],
@@ -83,7 +83,7 @@ const TIERS = {
   B: {
     color: 'var(--connect-blue)',
     name: 'Tier B · Standard venues',
-    pay60: 400, payAfter: 300,
+    pay60: 300, payAfter: 300,
     qual: '< 500 Google reviews · established footprint · steady traffic',
     types: ['Local restaurants', 'Boutique hotels', 'Coffee shops', 'Mid-size venues'],
     examples: ['Neighborhood gastropubs', 'Independent hotels', 'Co-working spaces', 'Art galleries'],
@@ -92,7 +92,7 @@ const TIERS = {
   C: {
     color: '#6B8FB8',
     name: 'Tier C · Experimental',
-    pay60: 300, payAfter: 200,
+    pay60: 200, payAfter: 200,
     qual: 'Net-new venue categories · test markets · partner trials',
     types: ['Gyms', 'Salons', 'Pop-ups', 'Universities', 'Medical waiting rooms'],
     examples: ['Boutique fitness studios', 'Festival villages', 'Hospital lobbies', 'Campus student unions'],
@@ -139,7 +139,7 @@ document.querySelectorAll('.tier-card').forEach(c => {
 
 // ===== Slide 10: Commission Estimator =====
 let estState = { spw: 5, mix: { A: 40, B: 40, C: 20 }, hor: 4 };
-const RATE_FIRST = { A: 500, B: 400, C: 300 };
+const RATE_FIRST = { A: 400, B: 300, C: 200 };
 
 function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
 
