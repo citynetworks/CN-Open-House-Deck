@@ -74,27 +74,24 @@ const TIERS = {
   A: {
     color: 'var(--charge-blue)',
     name: 'Tier A · Premier venues',
-    pay60: 400, payAfter: 400,
-    qual: '500+ Google reviews · key metro markets · top-flow venue types',
-    types: ['Bars', 'Hotels', 'Casinos', 'Music venues', 'Major restaurants'],
+    pay: 400,
+        types: ['Bars', 'Hotels', 'Casinos', 'Music venues', 'Major restaurants'],
     examples: ['MSG Madison Square Garden', 'Bellagio Las Vegas', 'The Bowery Hotel', 'Jazz at Lincoln Center'],
     why: 'High footfall, long dwell time, premium clientele. These venues turn power banks faster than anywhere else on the network.',
   },
   B: {
     color: 'var(--connect-blue)',
     name: 'Tier B · Standard venues',
-    pay60: 300, payAfter: 300,
-    qual: '< 500 Google reviews · established footprint · steady traffic',
-    types: ['Local restaurants', 'Boutique hotels', 'Coffee shops', 'Mid-size venues'],
+    pay: 300,
+        types: ['Local restaurants', 'Boutique hotels', 'Coffee shops', 'Mid-size venues'],
     examples: ['Neighborhood gastropubs', 'Independent hotels', 'Co-working spaces', 'Art galleries'],
     why: 'The volume of the network. Reliable placements that stack quickly to build market density.',
   },
   C: {
     color: '#6B8FB8',
     name: 'Tier C · Experimental',
-    pay60: 200, payAfter: 200,
-    qual: 'Net-new venue categories · test markets · partner trials',
-    types: ['Gyms', 'Salons', 'Pop-ups', 'Universities', 'Medical waiting rooms'],
+    pay: 200,
+        types: ['Gyms', 'Salons', 'Pop-ups', 'Universities', 'Medical waiting rooms'],
     examples: ['Boutique fitness studios', 'Festival villages', 'Hospital lobbies', 'Campus student unions'],
     why: 'New ground. Where reps prove a category can work — early movers get first claim on the territory.',
   },
@@ -111,17 +108,17 @@ function setTier(letter) {
         <h2 class="subtitle" style="margin-top: 8px; font-size: 56px;">${t.name.split(' · ')[1]}</h2>
       </div>
       <div style="text-align: right;">
-        <div style="font-family:'Inter Tight'; font-weight:700; font-size: 80px; line-height:1; color: ${t.color}; letter-spacing:-0.03em;">$${t.pay60}<span style="font-size:24px; font-weight:500; opacity:0.6; letter-spacing:0;"> / station</span></div>
-        <div style="font-size: 16px; letter-spacing: 0.14em; opacity: 0.55; text-transform: uppercase; margin-top: 6px;">First 60 days · then $${t.payAfter}/station</div>
+        <div style="font-family:'Inter Tight'; font-weight:700; font-size: 80px; line-height:1; color: ${t.color}; letter-spacing:-0.03em;">${t.pay}<span style="font-size:24px; font-weight:500; opacity:0.6; letter-spacing:0;"> / station</span></div>
       </div>
     </div>
 
-    <div class="td-section">
-      <div class="td-label">Qualifies as</div>
-      <p style="margin-top: 12px; font-size: 22px; line-height: 1.45; color: var(--ink-700);">${t.qual}</p>
-    </div>
+    
+    <div class="td-section" style="background: rgba(0,158,250,0.06); border: 1px solid rgba(0,158,250,0.2); border-radius: 12px; padding: 16px 20px;">
+  <div class="td-label" style="color: var(--charge-blue);">Hit List Bonus</div>
+  <p style="margin-top: 8px; font-size: 20px; line-height: 1.45; color: var(--ink-700);">Place from the pre-vetted Hit List and earn an extra <strong>+$50 per placement</strong> on top of your tier rate.</p>
+</div>
 
-    <div class="td-section">
+<div class="td-section">
       <div class="td-label">Venue types</div>
       <div class="td-list">${t.types.map(x => `<div class="td-chip">${x}</div>`).join('')}</div>
     </div>
