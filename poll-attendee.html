@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>chargeFUZE Open House — Live Poll</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#05101C; --bg-2:#0A1A2B; --bg-3:#102438;
+    --charge:#009EFA; --spark:#43F4FE; --ink:#FFFFFF; --muted:#A9B8CA; --muted-2:#7E93AC;
+    --border:rgba(255,255,255,.12); --ok:#0FB36B;
+    --font-display:'Poppins','Helvetica Neue',Arial,sans-serif;
+    --font-body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --tk-hero:-.02em; --tk-label:.10em;
+    --hero:url("https://citynetworks.github.io/CN-Open-House-Deck/assets/photos/powerbank-hand.jpg");
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{
+    font-family:var(--font-body);color:var(--ink);min-height:100vh;display:flex;flex-direction:column;padding:26px 22px;
+    background:
+      radial-gradient(900px 520px at 50% -16%, rgba(0,158,250,.18), transparent 60%),
+      var(--bg);
+  }
+  .logo{height:24px;display:block;margin:0 auto auto;opacity:.96;}
+  .wrap{margin:auto 0;width:100%;}
+  .kicker{font-family:var(--font-body);font-size:11px;letter-spacing:var(--tk-label);
+    text-transform:uppercase;color:var(--spark);font-weight:600;text-align:center;margin-bottom:12px;}
+  .qtext{font-family:var(--font-display);font-size:27px;font-weight:600;line-height:1.2;
+    letter-spacing:var(--tk-hero);margin-bottom:26px;text-align:center;}
+
+  .opt{display:block;width:100%;background:rgba(16,36,56,.85);color:var(--ink);
+    border:1.5px solid var(--border);border-radius:14px;padding:18px 20px;font-size:18px;font-weight:600;
+    margin-bottom:12px;cursor:pointer;transition:all .15s ease;text-align:left;font-family:inherit;}
+  .opt:active{transform:scale(.985);}
+  .opt.picked{background:linear-gradient(90deg,var(--charge),var(--spark));color:#05101C;
+    border-color:transparent;box-shadow:0 6px 20px rgba(0,158,250,.34);}
+  .opt.picked::after{content:" ✓";float:right;}
+
+  .field{display:flex;gap:10px;}
+  .field input{flex:1;background:rgba(16,36,56,.85);border:1.5px solid var(--border);
+    border-radius:14px;padding:18px;font-size:18px;color:var(--ink);outline:none;font-family:inherit;}
+  .field input:focus{border-color:var(--charge);}
+  .field button{background:linear-gradient(90deg,var(--charge),var(--spark));color:#05101C;border:none;
+    border-radius:14px;padding:0 22px;font-size:17px;font-weight:700;cursor:pointer;font-family:inherit;}
+
+  .note{text-align:center;color:var(--muted);font-size:14px;margin-top:18px;min-height:20px;}
+  .note.good{color:var(--ok);}
+
+  .standby{text-align:center;margin:auto 0;padding:46px 20px;border-radius:20px;
+    background:linear-gradient(rgba(5,16,28,.72),rgba(5,16,28,.92)), var(--hero) center/cover;}
+  .pulse{width:54px;height:54px;border-radius:50%;
+    background:linear-gradient(90deg,var(--charge),var(--spark));margin:0 auto 22px;
+    opacity:.3;animation:p 1.6s ease-in-out infinite;}
+  @keyframes p{0%,100%{transform:scale(.7);opacity:.22;}50%{transform:scale(1);opacity:.6;}}
+  .standby h2{font-family:var(--font-display);font-size:27px;font-weight:600;letter-spacing:var(--tk-hero);margin-bottom:8px;}
+  .standby p{color:var(--muted);font-size:15px;}
+  .foot{text-align:center;color:var(--muted-2);font-size:11px;letter-spacing:.08em;margin-top:auto;padding-top:22px;}
+</style>
+</head>
+<body>
+  <img class="logo" src="https://citynetworks.github.io/CN-Open-House-Deck/assets/logos/chargefuze-official-white.png" alt="chargeFUZE" />
+  <div class="wrap" id="wrap">
+    <div class="standby"><div class="pulse"></div><h2>You're in.</h2><p>The next poll will appear here automatically.</p></div>
+  </div>
+  <div class="foot" id="foot">connecting…</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import { getDatabase, ref, onValue, set }
+  from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+
+/* ===== SHARED CONFIG — must match the presenter file exactly ===== */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAVNpCP-OPKyUWp9c1WGeS31RNAiTpq0a8",
+  authDomain: "cnpolls.firebaseapp.com",
+  databaseURL: "https://cnpolls-default-rtdb.firebaseio.com",
+  projectId: "cnpolls",
+  storageBucket: "cnpolls.firebasestorage.app",
+  messagingSenderId: "1068314999622",
+  appId: "1:1068314999622:web:bfe443b81ac49ee96f4347",
+};
+const SESSION_ID = "openhouse-2026";
+
+const app = initializeApp(FIREBASE_CONFIG);
+const db  = getDatabase(app);
+const base = SESSION_ID;
+
+let clientId = localStorage.getItem("cf_poll_id");
+if (!clientId){ clientId = Math.random().toString(36).slice(2) + Date.now().toString(36);
+  localStorage.setItem("cf_poll_id", clientId); }
+
+const wrap = document.getElementById("wrap");
+const foot = document.getElementById("foot");
+let current = null;
+
+onValue(ref(db, `${base}/active`), (snap) => {
+  current = snap.val();
+  current ? render(current) : standby();
+});
+
+function standby(){
+  wrap.innerHTML = `<div class="standby"><div class="pulse"></div>
+    <h2>You're in.</h2><p>The next poll will appear here automatically.</p></div>`;
+  foot.textContent = "live · hang tight";
+}
+function render(q){
+  foot.textContent = "tap to answer · you can change it anytime";
+  if (q.type === "choice"){
+    wrap.innerHTML = `<div class="kicker">Live Poll</div><div class="qtext">${q.text}</div>
+      ${q.options.map((o,i)=>`<button class="opt" data-i="${i}">${o}</button>`).join("")}
+      <div class="note" id="note"></div>`;
+    wrap.querySelectorAll(".opt").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const i = Number(btn.dataset.i);
+        set(ref(db, `${base}/votes/${q.id}/${clientId}`), i);
+        wrap.querySelectorAll(".opt").forEach(b=>b.classList.remove("picked"));
+        btn.classList.add("picked");
+        note("Locked in. Tap another to change.", true);
+      });
+    });
+  } else {
+    wrap.innerHTML = `<div class="kicker">Live Poll</div><div class="qtext">${q.text}</div>
+      <div class="field">
+        <input id="txt" maxlength="24" placeholder="Type here…" autocomplete="off" />
+        <button id="send">Send</button>
+      </div><div class="note" id="note"></div>`;
+    const input = document.getElementById("txt");
+    const submit = () => {
+      const val = input.value.trim(); if (!val) return;
+      set(ref(db, `${base}/votes/${q.id}/${clientId}`), val);
+      note(`Sent "${val}" — it's up on screen.`, true);
+    };
+    document.getElementById("send").addEventListener("click", submit);
+    input.addEventListener("keydown", e => { if (e.key === "Enter") submit(); });
+    input.focus();
+  }
+}
+function note(msg, good){
+  const n = document.getElementById("note");
+  if (n){ n.textContent = msg; n.className = "note" + (good?" good":""); }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>chargeFUZE Open House — Live Polls (Presenter)</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&display=swap" rel="stylesheet">
+
+<!-- QR code library (optional, fails gracefully if it can't load) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<style>
+  /* Tokens pulled directly from the deck's colors_and_type.css */
+  :root{
+    --bg:#05101C; --bg-2:#0A1A2B; --bg-3:#102438; --track:#1B3450;
+    --charge:#009EFA; --spark:#43F4FE; --power:#47D6FA;
+    --ink:#FFFFFF; --muted:#A9B8CA; --muted-2:#7E93AC;
+    --border:rgba(255,255,255,.12); --success:#0FB36B;
+    --font-display:'Poppins','Helvetica Neue',Arial,sans-serif;
+    --font-body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --font-num:'Inter Tight','Inter','Helvetica Neue',Arial,sans-serif;
+    --tk-hero:-.02em; --tk-label:.10em;
+    --hero:url("https://citynetworks.github.io/CN-Open-House-Deck/assets/photos/powerbank-hand.jpg");
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:var(--font-body);color:var(--ink);min-height:100vh;padding:30px 40px 46px;position:relative;
+    background:
+      radial-gradient(1100px 560px at 84% -12%, rgba(0,158,250,.16), transparent 60%),
+      radial-gradient(900px 500px at 0% 110%, rgba(67,244,254,.07), transparent 55%),
+      var(--bg);
+  }
+  .topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:24px;}
+  .brand .logo img{height:30px;display:block;}
+  .brand .kick{display:block;margin-top:10px;font-size:11px;letter-spacing:var(--tk-label);
+    text-transform:uppercase;color:var(--muted-2);font-weight:600;}
+
+  .joincard{display:flex;align-items:center;gap:16px;background:rgba(16,36,56,.66);
+    border:1px solid rgba(0,158,250,.30);border-radius:14px;padding:12px 16px;backdrop-filter:blur(6px);}
+  .joincard .label{font-size:10px;letter-spacing:var(--tk-label);color:var(--muted-2);margin-bottom:5px;font-weight:600;}
+  .joincard .url{font-size:14px;font-weight:600;color:var(--spark);word-break:break-all;max-width:280px;}
+  #qr{background:#fff;padding:6px;border-radius:8px;line-height:0;}
+  #qr:empty{display:none;}
+
+  .controls{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px;}
+  .ctrl{background:rgba(16,36,56,.8);color:var(--ink);border:1px solid var(--border);
+    border-radius:999px;padding:11px 19px;font-size:14px;font-weight:600;cursor:pointer;
+    transition:all .15s ease;font-family:inherit;}
+  .ctrl:hover{border-color:var(--charge);}
+  .ctrl.active{background:linear-gradient(90deg,var(--charge),var(--spark));color:#05101C;
+    border-color:transparent;box-shadow:0 6px 22px rgba(0,158,250,.38);}
+  .ctrl.ghost{background:transparent;color:var(--muted-2);font-weight:500;}
+  .ctrl.ghost:hover{color:var(--ink);}
+
+  .stage{background:rgba(10,26,43,.55);border:1px solid rgba(255,255,255,.06);
+    border-radius:22px;padding:38px;min-height:56vh;position:relative;overflow:hidden;}
+  .kicker{font-family:var(--font-body);font-size:12px;letter-spacing:var(--tk-label);
+    text-transform:uppercase;color:var(--spark);font-weight:600;margin-bottom:14px;}
+  .qtext{font-family:var(--font-display);font-size:34px;font-weight:600;line-height:1.14;
+    letter-spacing:var(--tk-hero);margin-bottom:6px;}
+  .meta{font-family:var(--font-num);font-size:13px;color:var(--muted);letter-spacing:.02em;margin-bottom:30px;}
+  .meta b{color:var(--spark);font-weight:600;}
+
+  .bar-row{margin-bottom:18px;}
+  .bar-head{display:flex;justify-content:space-between;font-size:16px;margin-bottom:7px;font-weight:600;}
+  .bar-head .pct{font-family:var(--font-num);color:var(--muted);font-variant-numeric:tabular-nums;font-weight:600;}
+  .track{background:var(--track);border-radius:10px;height:36px;overflow:hidden;}
+  .fill{height:100%;width:0;border-radius:10px;
+    background:linear-gradient(90deg,var(--charge),var(--spark));
+    transition:width .7s cubic-bezier(.22,1,.36,1);}
+  .bar-row.is-correct .fill{background:linear-gradient(90deg,#0a8f55,var(--success));}
+  .bar-row.is-correct .bar-head .opt::after{content:" ✓";color:var(--success);}
+
+  .cloud{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline;padding-top:6px;}
+  .cloud span{font-family:var(--font-display);color:var(--spark);font-weight:600;line-height:1.1;
+    letter-spacing:var(--tk-hero);transition:font-size .6s ease, opacity .6s ease;opacity:.9;}
+  .empty{color:var(--muted-2);font-size:17px;padding-top:10px;}
+
+  .standby{margin:-38px;min-height:56vh;border-radius:22px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    background:linear-gradient(rgba(5,16,28,.74),rgba(5,16,28,.92)), var(--hero) center/cover;}
+  .standby h2{font-family:var(--font-display);color:var(--ink);font-size:42px;font-weight:600;
+    letter-spacing:var(--tk-hero);margin-bottom:12px;}
+  .standby p{color:var(--muted);font-size:16px;}
+
+  .footer{position:absolute;left:40px;right:40px;bottom:20px;
+    display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted-2);}
+  .footer .left{display:flex;gap:18px;align-items:center;}
+  .footer button{background:none;border:none;color:var(--muted-2);cursor:pointer;font-size:12px;
+    text-decoration:underline;font-family:inherit;}
+  .footer button:hover{color:var(--spark);}
+  .pager{letter-spacing:.12em;font-family:var(--font-num);}
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="brand">
+      <span class="logo"><img src="https://citynetworks.github.io/CN-Open-House-Deck/assets/logos/chargefuze-official-white.png" alt="chargeFUZE" /></span>
+      <span class="kick">Live Polls · Presenter View</span>
+    </div>
+    <div class="joincard">
+      <div>
+        <div class="label">ATTENDEES JOIN AT</div>
+        <div class="url" id="joinUrl">set ATTENDEE_URL in the config</div>
+      </div>
+      <div id="qr"></div>
+    </div>
+  </div>
+
+  <div class="controls" id="controls"></div>
+
+  <div class="stage" id="stage">
+    <div class="standby"><div class="kicker">chargeFUZE · Open House 2026</div>
+      <h2>Standby</h2><p>Pick a poll above to push it to everyone's phone.</p></div>
+  </div>
+
+  <div class="footer">
+    <div class="left">
+      <span id="status">Connecting…</span>
+      <button id="resetQ">Reset this poll's votes</button>
+      <button id="resetAll">Reset all polls</button>
+    </div>
+    <div class="pager">chargeFUZE / Open House 2026</div>
+  </div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import { getDatabase, ref, onValue, set, remove }
+  from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+
+/* ===== SHARED CONFIG — identical in the attendee file ===== */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAVNpCP-OPKyUWp9c1WGeS31RNAiTpq0a8",
+  authDomain: "cnpolls.firebaseapp.com",
+  databaseURL: "https://cnpolls-default-rtdb.firebaseio.com",
+  projectId: "cnpolls",
+  storageBucket: "cnpolls.firebasestorage.app",
+  messagingSenderId: "1068314999622",
+  appId: "1:1068314999622:web:bfe443b81ac49ee96f4347",
+};
+const SESSION_ID = "openhouse-2026";
+
+/* ===== PRESENTER-ONLY CONFIG ===== */
+const ATTENDEE_URL = "https://citynetworks.github.io/CN-Open-House-Deck/poll-attendee.html";
+
+const QUESTIONS = [
+  { id:"radius", type:"choice",
+    text:"How many bars & restaurants are within a 2-mile radius of you?",
+    options:["0–5","5–15","15–30","30+"] },
+  { id:"city", type:"text", text:"Drop your city." },
+  { id:"tier", type:"choice",
+    text:"Rooftop bar. 600 Google reviews. Downtown LA. What tier?",
+    options:["Tier A · $400","Tier B · $300","Tier C · $200"], answer:0 },
+  { id:"commit", type:"choice",
+    text:"How many venues are you closing in your first 30 days?",
+    options:["1–3","4–7","8–12","13+"] },
+];
+
+/* ===== ENGINE ===== */
+const app = initializeApp(FIREBASE_CONFIG);
+const db  = getDatabase(app);
+const base = `${SESSION_ID}`;
+let current = null, reveal = false;
+const $ = (id) => document.getElementById(id);
+
+$("joinUrl").textContent = ATTENDEE_URL;
+try { new QRCode($("qr"), { text: ATTENDEE_URL, width:78, height:78,
+      colorDark:"#05101C", colorLight:"#ffffff" }); } catch(e){}
+
+const controls = $("controls");
+QUESTIONS.forEach((q, i) => {
+  const b = document.createElement("button");
+  b.className = "ctrl"; b.textContent = `${i+1}. ${q.text.slice(0,28)}${q.text.length>28?"…":""}`;
+  b.dataset.qid = q.id;
+  b.addEventListener("click", () => pushQuestion(q));
+  controls.appendChild(b);
+});
+const standbyBtn = document.createElement("button");
+standbyBtn.className = "ctrl ghost"; standbyBtn.textContent = "■ Standby";
+standbyBtn.addEventListener("click", () => pushQuestion(null));
+controls.appendChild(standbyBtn);
+
+const revealBtn = document.createElement("button");
+revealBtn.className = "ctrl ghost"; revealBtn.textContent = "✓ Reveal answer";
+revealBtn.addEventListener("click", () => { reveal = !reveal; renderActiveControls(); renderVotes(lastVotes); });
+controls.appendChild(revealBtn);
+
+function pushQuestion(q){
+  current = q; reveal = false;
+  set(ref(db, `${base}/active`), q || null);
+  renderActiveControls();
+}
+function renderActiveControls(){
+  document.querySelectorAll(".ctrl[data-qid]").forEach(b => {
+    b.classList.toggle("active", current && b.dataset.qid === current.id);
+  });
+  revealBtn.style.display = (current && current.type === "choice" && "answer" in current) ? "" : "none";
+  revealBtn.classList.toggle("active", reveal);
+}
+
+onValue(ref(db, `${base}/active`), (snap) => {
+  current = snap.val(); watchVotes(); renderActiveControls();
+  if (!current) renderStandby();
+});
+
+let voteUnsub = null, lastVotes = {};
+function watchVotes(){
+  if (voteUnsub) voteUnsub();
+  if (!current){ voteUnsub = null; return; }
+  voteUnsub = onValue(ref(db, `${base}/votes/${current.id}`),
+    (snap) => { lastVotes = snap.val() || {}; renderVotes(lastVotes); });
+}
+
+const stage = $("stage");
+function renderStandby(){
+  stage.innerHTML = `<div class="standby"><div class="kicker">chargeFUZE · Open House 2026</div>
+    <h2>Standby</h2><p>Pick a poll above to push it to everyone's phone.</p></div>`;
+}
+function renderVotes(votes){
+  if (!current) return;
+  const values = Object.values(votes), total = values.length;
+  if (current.type === "choice"){
+    const counts = current.options.map((_, i) => values.filter(v => Number(v) === i).length);
+    const rows = current.options.map((opt, i) => {
+      const c = counts[i], pct = total ? Math.round((c/total)*100) : 0;
+      const correct = reveal && current.answer === i;
+      return `<div class="bar-row ${correct ? "is-correct":""}">
+        <div class="bar-head"><span class="opt">${opt}</span>
+          <span class="pct">${c} · ${pct}%</span></div>
+        <div class="track"><div class="fill" style="width:${pct}%"></div></div></div>`;
+    }).join("");
+    stage.innerHTML = head(total) + rows;
+  } else {
+    const tally = {};
+    values.forEach(v => {
+      const key = String(v).trim().replace(/\s+/g," ").toLowerCase().replace(/\b\w/g, m => m.toUpperCase());
+      if (key) tally[key] = (tally[key]||0) + 1;
+    });
+    const entries = Object.entries(tally).sort((a,b)=>b[1]-a[1]);
+    const max = entries.length ? entries[0][1] : 1;
+    const cloud = entries.length
+      ? `<div class="cloud">${entries.map(([word,n])=>{
+          const size = 20 + (n/max)*46;
+          return `<span style="font-size:${size}px;opacity:${0.55+0.45*(n/max)}">${word}</span>`;
+        }).join("")}</div>`
+      : `<div class="empty">Waiting for the first answer…</div>`;
+    stage.innerHTML = head(total) + cloud;
+  }
+}
+function head(total){
+  return `<div class="kicker">Live Poll · Now</div>
+          <div class="qtext">${current.text}</div>
+          <div class="meta"><b>${total}</b> ${total===1?"response":"responses"} · live</div>`;
+}
+
+$("resetQ").addEventListener("click", () => {
+  if (!current) return alert("Push a poll first, then reset it.");
+  if (confirm(`Clear all votes for "${current.text}"?`)) remove(ref(db, `${base}/votes/${current.id}`));
+});
+$("resetAll").addEventListener("click", () => {
+  if (confirm("Clear votes for EVERY poll in this session?")){
+    remove(ref(db, `${base}/votes`)); set(ref(db, `${base}/active`), null);
+  }
+});
+
+$("status").textContent = "Connected · ready";
+renderStandby();
+</script>
+</body>
+</html>
